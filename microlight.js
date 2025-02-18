@@ -18,13 +18,7 @@
         factory((root.microlight = {}));
     }
 }(this, function (exports) {
-    // for better compression
-    var _window       = window,
-        _document     = document,
-        appendChild   = 'appendChild',
-        test          = 'test',
-
-        i,
+    var i,
         microlighted,
         el;  // current microlighted element to run through
 
@@ -32,7 +26,7 @@
     
     var reset = function(cls) {
         // nodes to highlight
-        microlighted = _document.getElementsByClassName(cls||'microlight');
+        microlighted = document.getElementsByClassName(cls||'microlight');
 
         for (i = 0; el = microlighted[i++];) {
             var text  = el.textContent,
@@ -82,13 +76,13 @@
                     (tokenType > 8 && chr == '\n') ||
                     [ // finalize conditions for other token types
                         // 0: whitespaces
-                        /\S/[test](chr),  // merged together
+                        /\S/.test(chr),  // merged together
                         // 1: operators
                         1,                // consist of a single character
                         // 2: braces
                         1,                // consist of a single character
                         // 3: (key)word
-                        !/[$\w]/[test](chr),
+                        !/[$\w]/.test(chr),
                         // 4: regex
                         (prev1 == '/' || prev1 == '\n') && multichar,
                         // 5: string with "
@@ -127,16 +121,16 @@
                             tokenType > 3 ? 3 :
                             // otherwise tokenType == 3, (key)word
                             // (1 if regexp matches, 0 otherwise)
-                            + /^(a(bstract|lias|nd|rguments|rray|s(m|sert)?|uto)|b(ase|egin|ool(ean)?|reak|yte)|c(ase|atch|har|hecked|lass|lone|ompl|onst|ontinue)|de(bugger|cimal|clare|f(ault|er)?|init|l(egate|ete)?)|do|double|e(cho|ls?if|lse(if)?|nd|nsure|num|vent|x(cept|ec|p(licit|ort)|te(nds|nsion|rn)))|f(allthrough|alse|inal(ly)?|ixed|loat|or(each)?|riend|rom|unc(tion)?)|global|goto|guard|i(f|mp(lements|licit|ort)|n(it|clude(_once)?|line|out|stanceof|t(erface|ernal)?)?|s)|l(ambda|et|ock|ong)|m(icrolight|odule|utable)|NaN|n(amespace|ative|ext|ew|il|ot|ull)|o(bject|perator|r|ut|verride)|p(ackage|arams|rivate|rotected|rotocol|ublic)|r(aise|e(adonly|do|f|gister|peat|quire(_once)?|scue|strict|try|turn))|s(byte|ealed|elf|hort|igned|izeof|tatic|tring|truct|ubscript|uper|ynchronized|witch)|t(emplate|hen|his|hrows?|ransient|rue|ry|ype(alias|def|id|name|of))|u(n(checked|def(ined)?|ion|less|signed|til)|se|sing)|v(ar|irtual|oid|olatile)|w(char_t|hen|here|hile|ith)|xor|yield)$/[test](token)
+                            + /^(a(bstract|lias|nd|rguments|rray|s(m|sert)?|uto)|b(ase|egin|ool(ean)?|reak|yte)|c(ase|atch|har|hecked|lass|lone|ompl|onst|ontinue)|de(bugger|cimal|clare|f(ault|er)?|init|l(egate|ete)?)|do|double|e(cho|ls?if|lse(if)?|nd|nsure|num|vent|x(cept|ec|p(licit|ort)|te(nds|nsion|rn)))|f(allthrough|alse|inal(ly)?|ixed|loat|or(each)?|riend|rom|unc(tion)?)|global|goto|guard|i(f|mp(lements|licit|ort)|n(it|clude(_once)?|line|out|stanceof|t(erface|ernal)?)?|s)|l(ambda|et|ock|ong)|m(icrolight|odule|utable)|NaN|n(amespace|ative|ext|ew|il|ot|ull)|o(bject|perator|r|ut|verride)|p(ackage|arams|rivate|rotected|rotocol|ublic)|r(aise|e(adonly|do|f|gister|peat|quire(_once)?|scue|strict|try|turn))|s(byte|ealed|elf|hort|igned|izeof|tatic|tring|truct|ubscript|uper|ynchronized|witch)|t(emplate|hen|his|hrows?|ransient|rue|ry|ype(alias|def|id|name|of))|u(n(checked|def(ined)?|ion|less|signed|til)|se|sing)|v(ar|irtual|oid|olatile)|w(char_t|hen|here|hile|ith)|xor|yield)$/.test(token)
                         ];
 
                         if (clazz) {
-                            el[appendChild](
-                                node = _document.createElement('span')
+                            el.appendChild(
+                                node = document.createElement('span')
                             ).classList.add(clazz);
-                            node[appendChild](_document.createTextNode(token));
+                            node.appendChild(document.createTextNode(token));
                         } else {
-                            el[appendChild](_document.createTextNode(token));
+                            el.appendChild(document.createTextNode(token));
                         }
                     }
 
@@ -156,9 +150,9 @@
                     while (![
                         1,                   //  0: whitespace
                                              //  1: operator or braces
-                        /[\/{}[(\-+*=<>:;|\\.,?!&@~]/[test](chr),
-                        /[\])]/[test](chr),  //  2: closing brace
-                        /[$\w]/[test](chr),  //  3: (key)word
+                        /[\/{}[(\-+*=<>:;|\\.,?!&@~]/.test(chr),
+                        /[\])]/.test(chr),  //  2: closing brace
+                        /[$\w]/.test(chr),  //  3: (key)word
                         chr == '/' &&        //  4: regex
                             // previous token was an
                             // opening brace or an
@@ -185,10 +179,10 @@
 
     exports.reset = reset;
 
-    if (_document.readyState == 'complete') {
+    if (document.readyState == 'complete') {
         reset();
     } else {
-        _window.addEventListener('load', function(){reset()}, 0);
+        window.addEventListener('load', function(){reset()}, 0);
     }
 }));
 
